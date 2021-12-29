@@ -59,12 +59,13 @@ class ItemsRelationManager extends HasManyRelationManager
                         'sm' => 2,
                     ])
                     ->required(),
-                Forms\Components\MultipleFileUpload::make('images')
+                Forms\Components\FileUpload::make('images')
                     ->label('图片')
+                    ->multiple()
+                    ->maxFiles(5)
                     ->columnSpan([
                         'sm' => 2,
                     ])
-                    ->maxItems(4)
                     ->required(),
                 Forms\Components\Toggle::make('is_public')
                     ->label('开启')

@@ -75,7 +75,7 @@ class VoteResource extends Resource
                     ->label('分类')
                     ->helperText('必须先保存分类才能在投票列表中选择')
                     ->relationship('categories')
-                    ->disableItemMovement()
+                    ->defaultItems(0)
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label('类目名称')
@@ -92,13 +92,15 @@ class VoteResource extends Resource
                         ->minValue(1)
                         ->required(),
                     Forms\Components\TextInput::make('single_limit')
-                        ->name('单人投票次数')
+                        ->name('单项投票次数')
+                        ->helperText('0表示不限制')
                         ->numeric()
                         ->default(0)
                         ->minValue(0)
                         ->required(),
                     Forms\Components\TextInput::make('total_limit')
                         ->name('总投票次数')
+                        ->helperText('0表示不限制')
                         ->numeric()
                         ->default(0)
                         ->minValue(0)

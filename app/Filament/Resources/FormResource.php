@@ -81,6 +81,7 @@ class FormResource extends Resource
                     Forms\Components\Repeater::make('fields')
                         ->schema([
                             Forms\Components\Select::make('type')
+                                ->label('类型')
                                 ->options([
                                     'input' => '输入框',
                                     'textarea' => '文本域',
@@ -102,8 +103,7 @@ class FormResource extends Resource
                                 ])
                                 ->reactive()
                                 ->lazy()
-                                ->default('input')
-                                ->label('类型'),
+                                ->default('input'),
                             Forms\Components\TextInput::make('title')
                                 ->label('标题')
                                 ->required()
@@ -157,17 +157,21 @@ class FormResource extends Resource
                                 ->columns([
                                     'md' => 10,
                                 ]),
-
-                            Forms\Components\TagsInput::make('options')
-                                ->columnSpan([
-                                    'md' => 5,
-                                ])
-                                ->helperText('当类型为单选多选下拉框时填写')
-                                ->placeholder('输入回车后输入下一个选项')
-                                ->required(fn(callable $get) => in_array($get('type'), ['select', 'radio', 'checkbox']))
-                                // todo bug when
-                                //->when(fn(callable $get) => in_array($get('type'), ['select', 'radio', 'checkbox']))
-                                ->label('选项'),
+                            Forms\Components\Group::make([
+                                Forms\Components\TagsInput::make('options')
+                                    ->label('选项')
+                                    ->columnSpan([
+                                        'md' => 5,
+                                    ])
+                                    ->helperText('当类型为单选多选下拉框时填写')
+                                    ->placeholder('输入回车后输入下一个选项')
+                                    ->required(fn(callable $get) => in_array($get('type'), ['select', 'radio', 'checkbox']))
+                                    ->when(fn(callable $get) => in_array($get('type'), ['select', 'radio', 'checkbox'])),
+                            ])->columnSpan([
+                                'md' => 10,
+                            ])->columns([
+                                'md' => 10,
+                            ])
                         ])
                         ->dehydrated()
                         ->defaultItems(1)

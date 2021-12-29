@@ -4,6 +4,7 @@ namespace App\Forms\Components;
 
 use Filament\Forms;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class SettingForm extends Forms\Components\Field
 {
@@ -23,6 +24,7 @@ class SettingForm extends Forms\Components\Field
         $state = $this->getState();
         $model = $this->getModel();
         $relationship = $model->{$this->getRelationship()}();
+        $state['share_image'] = is_array($state['share_image']) ? Arr::first($state['share_image']) : $state['share_image'];
 
         if ($setting = $relationship->first()) {
             $setting->update($state);
@@ -78,7 +80,6 @@ class SettingForm extends Forms\Components\Field
                     ->when(fn(callable $get) => $get('is_share') === true),
                 Forms\Components\FileUpload::make('share_image')
                     ->label('分享图片')
-                    ->image()
                     ->required(fn(callable $get) => $get('is_share') === true)
                     ->when(fn(callable $get) => $get('is_share') === true),
             ]),
