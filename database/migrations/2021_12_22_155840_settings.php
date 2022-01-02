@@ -18,7 +18,7 @@ class Settings extends Migration
             $table->unsignedInteger('settingable_id');
             $table->string('settingable_type');
 
-            $table->boolean('is_app')->default(true)->comment('APP限制');
+            $table->boolean('is_cgxw')->default(true)->comment('川观新闻限制');
             $table->boolean('is_wechat')->default(true)->comment('微信限制');
             $table->boolean('is_wechat_app')->default(false)->comment('微信小程序限制');
             $table->boolean('is_wechat_web')->default(false)->comment('微信网站限制');

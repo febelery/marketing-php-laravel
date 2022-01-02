@@ -40,7 +40,7 @@ class SettingForm extends Forms\Components\Field
         return [
             Forms\Components\Placeholder::make('使用平台'),
             Forms\Components\Grid::make(5)->schema([
-                Forms\Components\Toggle::make('is_app')
+                Forms\Components\Toggle::make('is_cgxw')
                     ->label('APP')
                     ->helperText('川观新闻投票')
                     ->default(true),
