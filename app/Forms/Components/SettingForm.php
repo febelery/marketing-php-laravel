@@ -22,8 +22,8 @@ class SettingForm extends Forms\Components\Field
     public function saveRelationships(): void
     {
         $state = $this->getState();
-        $model = $this->getModel();
-        $relationship = $model->{$this->getRelationship()}();
+        $record = $this->getRecord();
+        $relationship = $record->{$this->getRelationship()}();
         $state['share_image'] = is_array($state['share_image']) ? Arr::first($state['share_image']) : $state['share_image'];
 
         if ($setting = $relationship->first()) {
@@ -32,7 +32,7 @@ class SettingForm extends Forms\Components\Field
             $relationship->updateOrCreate($state);
         }
 
-        $model->touch();
+        $record->touch();
     }
 
     public function getChildComponents(): array
@@ -103,12 +103,10 @@ class SettingForm extends Forms\Components\Field
     {
         parent::setUp();
 
-        $this->afterStateHydrated(function (SettingForm $component) {
-            $model = $component->getModel();
+        $this->afterStateHydrated(function (SettingForm $component, ?Model $record) {
+            $setting = $record?->getRelationValue($this->getRelationship());
 
-            $address = $model instanceof Model ? $model->getRelationValue($this->getRelationship()) : null;
-
-            $component->state($address);
+            $component->state($setting ? $setting->toArray() : []);
         });
 
         $this->dehydrated(false);

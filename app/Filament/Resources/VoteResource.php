@@ -130,43 +130,32 @@ class VoteResource extends Resource
                         ->label('列数')
                         ->numeric()
                         ->default(2)
-                        //->rules([
-                        //    function () {
-                        //        return function (string $attribute, $value, $fail) {
-                        //            if ($value > 3 || $value < 1) {
-                        //                $fail("{$attribute} 必须在1-3之间");
-                        //            }
-                        //        };
-                        //    },
-                        //])
+                        ->maxValue(3)
+                        ->minValue(1)
                         ->minValue(1)
                         ->maxValue(3),
                     Forms\Components\TextInput::make('button_name')
                         ->label('按钮名称')
                         ->default('投票'),
                 ]),
-                Forms\Components\TextInput::make('theme_color')
-                    ->label('主题色')
-                    ->type('color')
-                    ->default('#be000a'),
-                Forms\Components\Grid::make(4)->schema([
-                    Forms\Components\Toggle::make('is_show_countdown')
+
+                Forms\Components\Grid::make(6)->schema([
+                    Forms\Components\Toggle::make('show_countdown')
                         ->label('倒计时')
                         ->helperText('显示倒计时')
                         ->default(true),
-                    Forms\Components\Toggle::make('is_show_statistics')
-                        ->label('统计')
-                        ->helperText('显示统计')
-                        ->default(true),
-                    Forms\Components\Toggle::make('is_show_search')
+                    Forms\Components\Toggle::make('show_search')
                         ->label('搜索')
                         ->helperText('显示搜索')
                         ->default(true),
-                    Forms\Components\Toggle::make('is_only_show')
+                    Forms\Components\Toggle::make('show_static')
                         ->label('静态')
-                        ->helperText('静态展示')
+                        ->helperText('不显示投票按钮')
                         ->default(false),
-
+                    Forms\Components\TextInput::make('theme_color')
+                        ->label('主题色')
+                        ->type('color')
+                        ->default('#be000a'),
                 ]),
             ])->columnSpan(2),
         ])->columns(3);

@@ -30,10 +30,9 @@ class Votes extends Migration
             $table->unsignedInteger('column')->default(2)->comment('列数');
             $table->string('button_name')->nullable()->default('投票')->comment('按钮名称');
             $table->string('theme_color')->default('#ff0000')->comment('按钮颜色');
-            $table->boolean('is_show_countdown')->default(true)->comment('是否显示倒计时');
-            $table->boolean('is_show_statistics')->default(true)->comment('是否显示统计');
-            $table->boolean('is_show_search')->default(true)->comment('是否显示搜索');
-            $table->boolean('is_only_show')->default(false)->comment('是否只显示');
+            $table->boolean('show_countdown')->default(true)->comment('是否显示倒计时');
+            $table->boolean('show_search')->default(true)->comment('是否显示搜索');
+            $table->boolean('show_static')->default(false)->comment('是否只显示');
 
             $table->boolean('is_public')->default(false)->comment('是否公开');
             $table->timestamp('start_at')->nullable();
