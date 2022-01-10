@@ -39,11 +39,7 @@ class SettingForm extends Forms\Components\Field
     {
         return [
             Forms\Components\Placeholder::make('使用平台'),
-            Forms\Components\Grid::make(5)->schema([
-                Forms\Components\Toggle::make('is_cgxw')
-                    ->label('APP')
-                    ->helperText('川观新闻投票')
-                    ->default(true),
+            Forms\Components\Grid::make(4)->schema([
                 Forms\Components\Toggle::make('is_wechat')
                     ->label('微信')
                     ->helperText('微信投票')
@@ -62,6 +58,23 @@ class SettingForm extends Forms\Components\Field
                     ->label('匿名')
                     ->disabled()
                     ->helperText('匿名投票')
+                    ->default(false),
+            ]),
+            Forms\Components\Grid::make(4)->schema([
+                Forms\Components\Toggle::make('is_cgxw')
+                    ->label('APP')
+                    ->reactive()
+                    ->helperText('川观新闻投票')
+                    ->default(true),
+                Forms\Components\Toggle::make('is_bind_phone')
+                    ->label('绑定手机')
+                    ->helperText('用手机号登录')
+                    ->when(fn(callable $get) => $get('is_cgxw') === true)
+                    ->default(true),
+                Forms\Components\Toggle::make('is_bind_wechat')
+                    ->label('绑定微信')
+                    ->helperText('绑定微信')
+                    ->when(fn(callable $get) => $get('is_cgxw') === true)
                     ->default(false),
             ]),
             Forms\Components\Grid::make(4)->schema([
