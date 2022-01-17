@@ -25,7 +25,6 @@ class VoteItems extends Migration
 
             $table->unsignedInteger('vote_count')->default(0);
             $table->unsignedInteger('cheat_count')->default(0);
-            $table->unsignedInteger('real_count')->default(0);
 
             $table->boolean('is_public')->default(false);
             $table->softDeletes();
