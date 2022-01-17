@@ -37,6 +37,6 @@ class Item extends Model
 
     public function getFirstImageAttribute(): string
     {
-        return collect($this->images)->first();
+        return collect($this->images)->first() ?? '';
     }
 }

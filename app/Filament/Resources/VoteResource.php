@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Forms\Components\QiniuFileUpload;
 use App\Forms\Components\SettingForm;
 use App\Models\Vote\Vote;
 use Filament\Forms;
@@ -43,7 +44,7 @@ class VoteResource extends Resource
                         ->label('结束时间')
                         ->default(now()->addDays(2))
                         ->required(),
-                    Forms\Components\FileUpload::make('cover')
+                    QiniuFileUpload::make('cover')
                         ->label('封面')
                         ->required()
                         ->image()

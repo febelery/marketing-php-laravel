@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\VoteResource\RelationManagers;
 
+use App\Forms\Components\QiniuFileUpload;
+use App\Forms\Components\WithQiniuUpload;
 use App\Models\Vote\Category;
 use App\Models\Vote\Item;
 use Filament\Resources\Form;
@@ -12,6 +14,8 @@ use Filament\Resources\Table;
 
 class ItemsRelationManager extends HasManyRelationManager
 {
+    use WithQiniuUpload;
+
     protected static string $relationship = 'items';
 
     protected static ?string $recordTitleAttribute = 'vote_id';
@@ -59,7 +63,7 @@ class ItemsRelationManager extends HasManyRelationManager
                         'sm' => 2,
                     ])
                     ->required(),
-                Forms\Components\FileUpload::make('images')
+                QiniuFileUpload::make('images')
                     ->label('图片')
                     ->multiple()
                     ->maxFiles(5)

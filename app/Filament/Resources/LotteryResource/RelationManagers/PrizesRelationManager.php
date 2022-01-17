@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\LotteryResource\RelationManagers;
 
+use App\Forms\Components\QiniuFileUpload;
+use App\Forms\Components\WithQiniuUpload;
 use Filament\Resources\Form;
 use Filament\Forms;
 use Filament\Tables;
@@ -10,6 +12,8 @@ use Filament\Resources\Table;
 
 class PrizesRelationManager extends HasManyRelationManager
 {
+    use WithQiniuUpload;
+
     protected static string $relationship = 'prizes';
 
     protected static ?string $recordTitleAttribute = 'lottery_id';
@@ -87,7 +91,7 @@ class PrizesRelationManager extends HasManyRelationManager
                     ->columnSpan([
                         'sm' => 2,
                     ]),
-                Forms\Components\FileUpload::make('icon')
+                QiniuFileUpload::make('icon')
                     ->label('图片')
                     ->columnSpan([
                         'sm' => 2,

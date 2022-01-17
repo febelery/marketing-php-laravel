@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\FormResource\Pages;
 use App\Filament\Resources\FormResource\RelationManagers;
+use App\Forms\Components\QiniuFileUpload;
 use App\Forms\Components\SettingForm;
 use App\Models\Form\Form as FormModal;
 use Filament\Forms;
@@ -59,7 +60,7 @@ class FormResource extends Resource
                         ->default(1)
                         ->minValue(0)
                         ->required(),
-                    Forms\Components\FileUpload::make('cover')
+                    QiniuFileUpload::make('cover')
                         ->label('封面')
                         ->image()
                         ->columnSpan([
