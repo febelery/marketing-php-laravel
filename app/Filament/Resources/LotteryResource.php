@@ -124,15 +124,15 @@ class LotteryResource extends Resource
                         ->disableOptionWhen(fn($value): bool => $value > 3)
                         ->default(1),
                     Forms\Components\Select::make('type')
-                        ->label('类型')
+                        ->label('动作')
                         ->options([
                             1 => '默认',
                             2 => '积分',
-                            3 => '投票',
-                            4 => '表单',
+                            3 => '投票后抽奖',
+                            4 => '填写表单后抽奖',
                         ])
                         ->required()
-                        ->disableOptionWhen(fn($value): bool => $value > 3)
+                        ->disableOptionWhen(fn($value): bool => $value > 1)
                         ->reactive()
                         ->default(1),
                     Forms\Components\TextInput::make('type_value')

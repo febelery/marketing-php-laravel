@@ -48,8 +48,8 @@ class RecordsRelationManager extends HasManyRelationManager
     protected function getTableActions(): array
     {
         return [
-            $this->getEditLinkTableAction()
-                ->label('处理')
+            //$this->getEditLinkTableAction()
+            //    ->label('处理')
         ];
     }
 

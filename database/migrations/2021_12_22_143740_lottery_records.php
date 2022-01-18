@@ -20,13 +20,13 @@ class LotteryRecords extends Migration
             $table->integer('prize_id')->unsigned();
 
             $table->string('name')->nullable();
+            $table->string('username')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('id_card')->nullable();
             $table->string('remark')->nullable()->comment('备注');
             $table->string('code')->nullable();
-            $table->tinyInteger('delivery_type')->default(0)->comment('0:自提,1:邮寄');
-            $table->unsignedTinyInteger('get_type')->default(0)->comment('0:默认,1:分享');
+            $table->string('express')->nullable()->comment('快递单号');
             $table->unsignedTinyInteger('status')->default(0)->comment('中奖状态');
 
             $table->ipAddress('ip');
