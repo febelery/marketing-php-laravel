@@ -52,6 +52,6 @@ class Lottery extends Model
 
     public function getRemainPrizeAttribute(): int
     {
-        return $this->prizes()->selectRaw('sum(total) - sum(lucky_count) as count')->first()->count;
+        return (int)$this->prizes()->selectRaw('sum(total) - sum(lucky_count) as count')->first()?->count;
     }
 }
