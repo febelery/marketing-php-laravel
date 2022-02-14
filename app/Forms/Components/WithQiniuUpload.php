@@ -10,7 +10,7 @@ trait WithQiniuUpload
     {
         $qiniu = new Auth(config('filesystems.disks.qiniu.access_key'), config('filesystems.disks.qiniu.secret_key'));
 
-        $saveKey = sprintf("marketing/%s/%s", md5(json_encode($fileInfo)), $fileInfo['name']);
+        $saveKey = sprintf("ross/%s/%s", substr(md5(json_encode($fileInfo)), 0, 16), $fileInfo['name']);
         $path = $saveKey ? sprintf("https://wximg.chuanbaoguancha.cn/%s", $saveKey) : 'https://wximg.chuanbaoguancha.cn/$(key)';
 
         $policy = [

@@ -86,17 +86,15 @@ class FormResource extends Resource
                                 ->options([
                                     'input' => '输入框',
                                     'textarea' => '文本域',
+                                    'switch' => '开关',
                                     'radio' => '单选框',
                                     'checkbox' => '多选框',
                                     'select' => '下拉框',
-                                    'date' => '日期',
                                     'datetime' => '日期时间',
-                                    'time' => '时间',
                                     'image' => '单图',
                                     'multi_image' => '多图',
                                     'video' => '视频',
                                     'file' => '文件',
-                                    'rich' => '富文本',
                                 ])
                                 ->required()
                                 ->columnSpan([
@@ -162,10 +160,10 @@ class FormResource extends Resource
                                 Forms\Components\TagsInput::make('options')
                                     ->label('选项')
                                     ->columnSpan([
-                                        'md' => 5,
+                                        'md' => 10,
                                     ])
-                                    ->helperText('当类型为单选多选下拉框时填写')
-                                    ->placeholder('输入回车后输入下一个选项')
+                                    ->helperText('输入回车后输入下一个选项')
+                                    ->placeholder('请输入')
                                     ->required(fn(callable $get) => in_array($get('type'), ['select', 'radio', 'checkbox']))
                                     ->when(fn(callable $get) => in_array($get('type'), ['select', 'radio', 'checkbox'])),
                             ])->columnSpan([
