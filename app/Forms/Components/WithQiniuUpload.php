@@ -10,8 +10,7 @@ trait WithQiniuUpload
     {
         $qiniu = new Auth(config('filesystems.disks.qiniu.access_key'), config('filesystems.disks.qiniu.secret_key'));
 
-        $pathURI = substr(md5(json_encode($fileInfo)), 0, 18) . '/' . $fileInfo['name'];
-        $saveKey = "ross/{$pathURI}";
+        $pathURI = substr(md5(json_encode($fileInfo)), 0, 14) . '-' . $fileInfo['name'];
         $entryURI = sprintf("%s:rosses/%s", config('filesystems.disks.qiniu.bucket'), $pathURI);
 
         $policy = [
@@ -29,7 +28,7 @@ trait WithQiniuUpload
                 'mime' => '$(mimeType)',
                 'ext' => '$(ext)',
             ]),
-            'saveKey' => $saveKey,
+            'saveKey' => "ross/{$pathURI}",
             'callbackBodyType' => 'application/json',
             'scope' => config('filesystems.disks.qiniu.bucket'),
             'fsizeLimit' => 1024 * 1024 * 350, // 250m
@@ -45,7 +44,8 @@ trait WithQiniuUpload
 
     public function finishUploadByQiniu($name, $path)
     {
-        $this->syncInput($name, str_replace('/ross/', '/rosses/', $path));
+        //$this->syncInput($name, str_replace('/ross/', '/rosses/', $path));
+        $this->syncInput($name, $path);
     }
 
     private function safeUrlBase64Encode($str): string
