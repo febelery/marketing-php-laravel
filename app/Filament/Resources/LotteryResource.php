@@ -163,10 +163,11 @@ class LotteryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
+            Tables\Columns\TextColumn::make('id')
+                ->label('ID'),
             Tables\Columns\TextColumn::make('title')
                 ->label('标题')
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
             Tables\Columns\TextColumn::make('remain_prize')
                 ->label('剩余奖品'),
             Tables\Columns\TextColumn::make('record_user')

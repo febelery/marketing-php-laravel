@@ -65,9 +65,23 @@ class RecordsRelationManager extends HasManyRelationManager
     {
         $columns = [];
         foreach (static::$fields as $field) {
-            $columns[] = Tables\Columns\TextColumn::make(sprintf("record->%s", $field->key))
-                ->label($field->title)
-                ->searchable();
+            if ($field->type == 'image' || $field->type == 'multi_image') {
+                $columns[] = Tables\Columns\ImageColumn::make(sprintf("record->%s", $field->key))
+                    ->label($field->title)
+                    ->getStateUsing(fn($record) => $record->record[$field->key][0]);
+            } elseif ($field->type == 'video') {
+                $columns[] = Tables\Columns\ViewColumn::make(sprintf("record->%s", $field->key))
+                    ->label($field->title)
+                    ->getStateUsing(fn($record) => $record->record[$field->key][0])
+                    ->view('filament.components.video');
+            } elseif ($field->type == 'switch') {
+                $columns[] = Tables\Columns\BooleanColumn::make(sprintf("record->%s", $field->key))
+                    ->label($field->title);
+            }else {
+                $columns[] = Tables\Columns\TextColumn::make(sprintf("record->%s", $field->key))
+                    ->label($field->title)
+                    ->searchable();
+            }
         }
 
         return $table

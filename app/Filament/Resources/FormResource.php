@@ -200,12 +200,13 @@ class FormResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
+            Tables\Columns\TextColumn::make('id')
+                ->label('ID'),
             Tables\Columns\TextColumn::make('title')
                 ->label('标题')
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
             Tables\Columns\TextColumn::make('record_user')
-                ->label('参与人数'),
+                ->label('参与次数'),
             Tables\Columns\TextColumn::make('view_count')
                 ->label('浏览次数'),
             Tables\Columns\BooleanColumn::make('active')

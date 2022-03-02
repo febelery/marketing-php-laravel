@@ -25,11 +25,11 @@ class ListVotes extends ListRecords
                 ->url(fn(Vote $record): string => route('filament.resources.votes.edit', $record))
                 ->requiresConfirmation()
                 ->label('编辑'),
-            Actions\LinkAction::make('delete')
-                ->color('danger')
-                ->action(fn(?Vote $record) => $record->delete())
-                ->label('删除')
-                ->requiresConfirmation(),
+            //Actions\LinkAction::make('delete')
+            //    ->color('danger')
+            //    ->action(fn(?Vote $record) => $record->delete())
+            //    ->label('删除')
+            //    ->requiresConfirmation(),
             // todo 显示链接
             Actions\LinkAction::make('show_url')
                 ->color('secondary')
