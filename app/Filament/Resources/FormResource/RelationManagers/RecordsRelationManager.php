@@ -26,7 +26,7 @@ class RecordsRelationManager extends HasManyRelationManager
         return [];
     }
 
-    protected function getRelationship(): Relation
+    public function getRelationship(): Relation
     {
         $ship = parent::getRelationship()->orderBy('id', 'desc');
         static::$fields = $ship->getParent()->fields;

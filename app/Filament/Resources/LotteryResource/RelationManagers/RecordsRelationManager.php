@@ -24,7 +24,7 @@ class RecordsRelationManager extends HasManyRelationManager
         return [];
     }
 
-    protected function getRelationship(): Relation
+    public function getRelationship(): Relation
     {
         return parent::getRelationship()->luckyGuys()->orderBy('id', 'desc');
     }

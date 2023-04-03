@@ -15,7 +15,8 @@ class AdminUsers extends Migration
     {
         Schema::create('admin_users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('email');
+            $table->string('name');
             $table->string('password');
             $table->string('ip_address')->nullable();
             $table->rememberToken();
