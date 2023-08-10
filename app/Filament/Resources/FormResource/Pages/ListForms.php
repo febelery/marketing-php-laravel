@@ -10,7 +10,7 @@ class ListForms extends ListRecords
 {
     protected static string $resource = FormResource::class;
 
-    protected function getFilteredTableQuery(): Builder
+    public function getFilteredTableQuery(): Builder
     {
         return parent::getFilteredTableQuery()->orderByDesc('id');
     }

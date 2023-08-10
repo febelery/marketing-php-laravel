@@ -6,13 +6,13 @@ use App\Forms\Components\QiniuFileUpload;
 use App\Forms\Components\WithQiniuUpload;
 use App\Models\Vote\Category;
 use App\Models\Vote\Item;
-use Filament\Resources\Form;
 use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Tables;
-use Filament\Resources\RelationManagers\HasManyRelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
+use Filament\Resources\RelationManagers\RelationManager;
 
-class ItemsRelationManager extends HasManyRelationManager
+class ItemsRelationManager extends RelationManager
 {
     use WithQiniuUpload;
 
@@ -26,16 +26,11 @@ class ItemsRelationManager extends HasManyRelationManager
 
     private static int $voteId;
 
-    protected function getCreateFormSchema(): array
-    {
-        self::$voteId = $this->getRelationship()->getParent()->id;
-        return parent::getCreateFormSchema();
-    }
 
-    public static function form(Form $form): Form
+    public  function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Card::make()->schema([
+            Forms\Components\Section::make()->schema([
                 Forms\Components\TextInput::make('title')
                     ->label('选项名称')
                     ->required(),
@@ -80,7 +75,7 @@ class ItemsRelationManager extends HasManyRelationManager
         ]);
     }
 
-    public static function table(Table $table): Table
+    public  function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -101,18 +96,11 @@ class ItemsRelationManager extends HasManyRelationManager
                     ->sortable(),
                 Tables\Columns\TextColumn::make('cheat_count')
                     ->label('作弊票数'),
-                Tables\Columns\BooleanColumn::make('is_public')
-                    ->label('是否公开'),
+                Tables\Columns\IconColumn::make('is_public')
+                    ->label('是否公开')->boolean(),
             ])
             ->filters([
                 //
             ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-
-        ];
     }
 }

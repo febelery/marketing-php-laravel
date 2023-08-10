@@ -13,7 +13,7 @@ class ListVotes extends ListRecords
 {
     protected static string $resource = VoteResource::class;
 
-    protected function getFilteredTableQuery(): Builder
+    public function getFilteredTableQuery(): Builder
     {
         return parent::getFilteredTableQuery()->orderByDesc('id');
     }

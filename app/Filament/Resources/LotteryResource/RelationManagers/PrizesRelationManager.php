@@ -4,13 +4,13 @@ namespace App\Filament\Resources\LotteryResource\RelationManagers;
 
 use App\Forms\Components\QiniuFileUpload;
 use App\Forms\Components\WithQiniuUpload;
-use Filament\Resources\Form;
 use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Tables;
-use Filament\Resources\RelationManagers\HasManyRelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
+use Filament\Resources\RelationManagers\RelationManager;
 
-class PrizesRelationManager extends HasManyRelationManager
+class PrizesRelationManager extends RelationManager
 {
     use WithQiniuUpload;
 
@@ -22,16 +22,10 @@ class PrizesRelationManager extends HasManyRelationManager
 
     protected static ?string $pluralLabel = '奖项';
 
-    protected function getCreateFormSchema(): array
-    {
-        $lottery = $this->getRelationship()->getParent();
-        return parent::getCreateFormSchema();
-    }
-
-    public static function form(Form $form): Form
+    public  function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Card::make()->schema([
+            Forms\Components\Section::make()->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('奖品')
                     ->placeholder('奖品名称')
@@ -106,7 +100,7 @@ class PrizesRelationManager extends HasManyRelationManager
         ]);
     }
 
-    public static function table(Table $table): Table
+    public  function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -123,8 +117,8 @@ class PrizesRelationManager extends HasManyRelationManager
                 Tables\Columns\TextColumn::make('rate')
                     ->default('-')
                     ->label('中奖概率'),
-                Tables\Columns\BooleanColumn::make('is_public')
-                    ->label('是否公开'),
+                Tables\Columns\IconColumn::make('is_public')
+                    ->label('是否公开')->boolean(),
             ])
             ->filters([
                 //

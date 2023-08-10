@@ -15,4 +15,5 @@ class CreateLottery extends CreateRecord
 
         return $data;
     }
+
 }

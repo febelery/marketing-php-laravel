@@ -6,16 +6,16 @@ use App\Forms\Components\QiniuFileUpload;
 use App\Forms\Components\SettingForm;
 use App\Models\Vote\Vote;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
 class VoteResource extends Resource
 {
     protected static ?string $model = Vote::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chart-square-bar';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $label = '投票';
 
@@ -27,7 +27,7 @@ class VoteResource extends Resource
     {
         return $form->schema([
             Forms\Components\Group::make()->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\TextInput::make('title')
                         ->label('标题')
                         ->required()
@@ -61,18 +61,18 @@ class VoteResource extends Resource
                     'sm' => 2,
                 ]),
             ])->columnSpan(2),
-            Forms\Components\Card::make()->schema([
+            Forms\Components\Section::make()->schema([
                 Forms\Components\Toggle::make('is_public')
                     ->label('开启')
                     ->helperText('开启后，投票可以正常展示')
                     ->default(true),
                 Forms\Components\Placeholder::make('created_at')
                     ->label('创建时间')
-                    ->content(fn(?Vote $record): string => $record ? $record->created_at->diffForHumans() : '-'),
+                    ->content(fn(?Vote $record): ?string => $record?->created_at->diffForHumans()),
                 Forms\Components\Placeholder::make('updated_at')
                     ->label('修改时间')
-                    ->content(fn(?Vote $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
-                Forms\Components\HasManyRepeater::make('categories')
+                    ->content(fn(?Vote $record): ?string => $record?->updated_at->diffForHumans()),
+                Forms\Components\Repeater::make('categories')
                     ->label('分类')
                     ->helperText('必须先保存分类才能在投票列表中选择')
                     ->relationship('categories')
@@ -83,7 +83,7 @@ class VoteResource extends Resource
                             ->required(),
                     ]),
             ])->columnSpan(1),
-            Forms\Components\Card::make()->schema([
+            Forms\Components\Section::make()->schema([
                 Forms\Components\Placeholder::make('限制'),
                 Forms\Components\Grid::make(3)->schema([
                     Forms\Components\TextInput::make('daily_limit')
@@ -109,7 +109,7 @@ class VoteResource extends Resource
                 ]),
                 SettingForm::make('setting'),
             ])->columnSpan(2),
-            Forms\Components\Card::make()->schema([
+            Forms\Components\Section::make()->schema([
                 Forms\Components\Placeholder::make('显示'),
                 Forms\Components\Grid::make()->schema([
                     Forms\Components\Select::make('sort')

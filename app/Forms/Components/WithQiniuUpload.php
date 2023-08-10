@@ -42,7 +42,7 @@ trait WithQiniuUpload
         return $qiniu->uploadToken(config('filesystems.disks.qiniu.bucket'), null, 600, $policy);
     }
 
-    public function finishUploadByQiniu($name, $path)
+    public function finishUploadByQiniu($name, $path): void
     {
         //$this->syncInput($name, str_replace('/ross/', '/rosses/', $path));
         $this->syncInput($name, $path);

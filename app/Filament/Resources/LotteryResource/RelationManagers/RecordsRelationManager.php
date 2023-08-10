@@ -2,14 +2,14 @@
 
 namespace App\Filament\Resources\LotteryResource\RelationManagers;
 
-use Filament\Resources\Form;
 use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Tables;
-use Filament\Resources\RelationManagers\HasManyRelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
+use Filament\Resources\RelationManagers\RelationManager;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class RecordsRelationManager extends HasManyRelationManager
+class RecordsRelationManager extends RelationManager
 {
     protected static string $relationship = 'records';
 
@@ -19,41 +19,22 @@ class RecordsRelationManager extends HasManyRelationManager
 
     protected static ?string $pluralLabel = '中奖记录';
 
-    protected function getCreateFormSchema(): array
-    {
-        return [];
-    }
-
     public function getRelationship(): Relation
     {
         return parent::getRelationship()->luckyGuys()->orderBy('id', 'desc');
     }
 
-    public function isTableSelectionEnabled(): bool
-    {
-        return false;
-    }
-
     protected function getTableHeaderActions(): array
     {
-        return [
-            // todo 导出excel
-            Tables\Actions\ButtonAction::make('export')
-                ->label('导出')
-                ->icon('heroicon-o-download')
-            //->action(fn($record) => $this->getExportUrl($record))
-        ];
+        return [];
     }
 
     protected function getTableActions(): array
     {
-        return [
-            //$this->getEditLinkTableAction()
-            //    ->label('处理')
-        ];
+        return [];
     }
 
-    public static function form(Form $form): Form
+    public  function form(Form $form): Form
     {
         return $form->schema([
             Forms\Components\Select::make('status')
@@ -65,7 +46,7 @@ class RecordsRelationManager extends HasManyRelationManager
         ]);
     }
 
-    public static function table(Table $table): Table
+    public  function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -91,8 +72,9 @@ class RecordsRelationManager extends HasManyRelationManager
                     ->searchable(),
                 Tables\Columns\TextColumn::make('delivery')
                     ->label('提取方式'),
-                Tables\Columns\BadgeColumn::make('status_text')
+                Tables\Columns\TextColumn::make('status_text')
                     ->label('状态')
+                    ->badge()
                     ->colors([
                         'warning' => '中奖',
                         'success' => '领取',
@@ -105,12 +87,5 @@ class RecordsRelationManager extends HasManyRelationManager
             ->filters([
                 //
             ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-
-        ];
     }
 }

@@ -1,12 +1,11 @@
 <style>
     body {
-        font-weight: 600;
-        font-size: 40px;
+        font-size: 28px;
     }
 
     .text {
         position: absolute;
-        width: 80%;
+        width: 60%;
         left: 25%;
         height: 40px;
         top: 30%;
@@ -72,7 +71,7 @@
 <x-filament::page>
 
     <div class="text">
-        <p>页面建设中  </p>
+        <p>页面建设中</p>
         <p>
             <span class="word wisteria">愿薪火相传,美德不灭</span>
             <span class="word belize">只要不失去你的崇高,整个世界都会为你敞开</span>

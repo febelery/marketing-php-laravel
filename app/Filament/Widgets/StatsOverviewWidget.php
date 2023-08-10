@@ -3,7 +3,7 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-use Filament\Widgets\StatsOverviewWidget\Card;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverviewWidget extends BaseWidget
 {
@@ -12,18 +12,18 @@ class StatsOverviewWidget extends BaseWidget
     protected function getCards(): array
     {
         return [
-            Card::make('新增用户', '-')
+            Stat::make('新增用户', '-')
                 ->description('-')
                 ->descriptionColor('success')
-                ->descriptionIcon('heroicon-s-trending-up'),
-            Card::make('UV', '-')
+                ->descriptionIcon('heroicon-m-arrow-trending-up'),
+            Stat::make('UV', '-')
                 ->description('-')
                 ->descriptionColor('success')
-                ->descriptionIcon('heroicon-s-trending-up'),
-            Card::make('PV', '-')
+                ->descriptionIcon('heroicon-m-arrow-trending-up'),
+            Stat::make('PV', '-')
                 ->description('-')
                 ->descriptionColor('danger')
-                ->descriptionIcon('heroicon-s-trending-down'),
+                ->descriptionIcon('heroicon-m-arrow-trending-down'),
         ];
     }
 }

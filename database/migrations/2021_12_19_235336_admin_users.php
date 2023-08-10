@@ -11,14 +11,13 @@ class AdminUsers extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('admin_users', function (Blueprint $table) {
             $table->id();
             $table->string('email');
             $table->string('name');
             $table->string('password');
-            $table->string('ip_address')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -29,7 +28,7 @@ class AdminUsers extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('admin_users');
     }

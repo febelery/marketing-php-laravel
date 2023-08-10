@@ -69,12 +69,12 @@ class SettingForm extends Forms\Components\Field
                 Forms\Components\Toggle::make('bind_phone')
                     ->label('绑定手机')
                     ->helperText('用手机号登录')
-                    ->when(fn(callable $get) => $get('allow_cgxw') === true)
+                    //->when(fn(callable $get) => $get('allow_cgxw') === true)
                     ->default(true),
                 Forms\Components\Toggle::make('bind_wechat')
                     ->label('绑定微信')
                     ->helperText('绑定微信')
-                    ->when(fn(callable $get) => $get('allow_cgxw') === true)
+                    //->when( fn(callable $get) => $get('allow_cgxw') === true)
                     ->default(false),
             ]),
             Forms\Components\Grid::make(4)->schema([
@@ -85,16 +85,16 @@ class SettingForm extends Forms\Components\Field
                     ->reactive(),
                 Forms\Components\TextInput::make('share_title')
                     ->label('分享标题')
-                    ->required(fn(callable $get) => $get('allow_share') === true)
-                    ->when(fn(callable $get) => $get('allow_share') === true),
+                    //->when(fn(callable $get) => $get('allow_share') === true)
+                    ->required(fn(callable $get) => $get('allow_share') === true),
                 Forms\Components\TextInput::make('share_desc')
                     ->label('分享描述')
-                    ->required(fn(callable $get) => $get('allow_share') === true)
-                    ->when(fn(callable $get) => $get('allow_share') === true),
+                    //->when(fn(callable $get) => $get('allow_share') === true)
+                    ->required(fn(callable $get) => $get('allow_share') === true),
                 Forms\Components\FileUpload::make('share_image')
                     ->label('分享图片')
-                    ->required(fn(callable $get) => $get('allow_share') === true)
-                    ->when(fn(callable $get) => $get('allow_share') === true),
+                    //->when(fn(callable $get) => $get('allow_share') === true)
+                    ->required(fn(callable $get) => $get('allow_share') === true),
             ]),
         ];
     }

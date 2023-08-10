@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Foundation\Auth\User;
+use Filament\Panel;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
-class AdminUser extends \Illuminate\Foundation\Auth\User implements FilamentUser
+class AdminUser extends User implements FilamentUser
 {
     use HasFactory, Authenticatable, Authorizable;
 
     protected $fillable = [
-        'name', 'password', 'ip_address'
+        'name', 'password'
     ];
 
     protected $hidden = [
@@ -20,9 +22,8 @@ class AdminUser extends \Illuminate\Foundation\Auth\User implements FilamentUser
         'remember_token',
     ];
 
-    public function canAccessFilament(): bool
+    public function canAccessPanel(Panel $panel): bool
     {
         return true;
     }
-
 }

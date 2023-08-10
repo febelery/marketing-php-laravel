@@ -2,14 +2,14 @@
 
 namespace App\Filament\Resources\FormResource\RelationManagers;
 
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Resources\RelationManagers\HasManyRelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
+use Filament\Resources\RelationManagers\RelationManager;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class RecordsRelationManager extends HasManyRelationManager
+class RecordsRelationManager extends RelationManager
 {
     protected static string $relationship = 'records';
 
@@ -19,35 +19,17 @@ class RecordsRelationManager extends HasManyRelationManager
 
     protected static ?string $pluralLabel = '填写记录';
 
-    protected static ?array $fields;
-
-    protected function getCreateFormSchema(): array
-    {
-        return [];
-    }
 
     public function getRelationship(): Relation
     {
         $ship = parent::getRelationship()->orderBy('id', 'desc');
-        static::$fields = $ship->getParent()->fields;
 
         return $ship;
     }
 
-    public function isTableSelectionEnabled(): bool
-    {
-        return false;
-    }
-
     protected function getTableHeaderActions(): array
     {
-        return [
-            // todo 导出excel
-            Tables\Actions\ButtonAction::make('export')
-                ->label('导出')
-                ->icon('heroicon-o-download')
-            //->action(fn($record) => $this->getExportUrl($record))
-        ];
+        return [];
     }
 
     protected function getTableActions(): array
@@ -55,13 +37,13 @@ class RecordsRelationManager extends HasManyRelationManager
         return [];
     }
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form->schema([
         ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         $columns = [];
         foreach (static::$fields as $field) {
@@ -75,8 +57,8 @@ class RecordsRelationManager extends HasManyRelationManager
                     ->getStateUsing(fn($record) => $record->record[$field->key][0])
                     ->view('filament.components.video');
             } elseif ($field->type == 'switch') {
-                $columns[] = Tables\Columns\BooleanColumn::make(sprintf("record->%s", $field->key))
-                    ->label($field->title);
+                $columns[] = Tables\Columns\IconColumn::make(sprintf("record->%s", $field->key))
+                    ->label($field->title)->boolean();
             }else {
                 $columns[] = Tables\Columns\TextColumn::make(sprintf("record->%s", $field->key))
                     ->label($field->title)
@@ -89,12 +71,5 @@ class RecordsRelationManager extends HasManyRelationManager
             ->filters([
                 //
             ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-
-        ];
     }
 }

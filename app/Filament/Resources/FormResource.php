@@ -8,17 +8,16 @@ use App\Forms\Components\QiniuFileUpload;
 use App\Forms\Components\SettingForm;
 use App\Models\Form\Form as FormModal;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Support\Str;
+use Filament\Tables\Table;
 
 class FormResource extends Resource
 {
     protected static ?string $model = FormModal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static ?string $label = '表单';
 
@@ -30,7 +29,7 @@ class FormResource extends Resource
     {
         return $form->schema([
             Forms\Components\Group::make()->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\TextInput::make('title')
                         ->label('标题')
                         ->required()
@@ -74,10 +73,10 @@ class FormResource extends Resource
                 ])->columns([
                     'sm' => 5,
                 ]),
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     SettingForm::make('setting'),
                 ]),
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Placeholder::make('字段'),
                     Forms\Components\Repeater::make('fields')
                         ->schema([
@@ -174,25 +173,25 @@ class FormResource extends Resource
                         ])
                         ->dehydrated()
                         ->defaultItems(1)
-                        ->disableLabel()
-                        ->createItemButtonLabel('添加字段')
+                        ->hiddenLabel()
+                        ->addActionLabel('添加字段')
                         ->columns([
                             'md' => 10,
                         ])
                         ->required(),
                 ]),
             ])->columnSpan(3),
-            Forms\Components\Card::make()->schema([
+            Forms\Components\Section::make()->schema([
                 Forms\Components\Toggle::make('is_public')
                     ->label('开启')
                     ->helperText('开启后，表单可以正常填写')
                     ->default(true),
                 Forms\Components\Placeholder::make('created_at')
                     ->label('创建时间')
-                    ->content(fn(?FormModal $record): string => $record ? $record->created_at->diffForHumans() : '-'),
+                    ->content(fn(?FormModal $record): ?string => $record?->created_at->diffForHumans()),
                 Forms\Components\Placeholder::make('updated_at')
                     ->label('修改时间')
-                    ->content(fn(?FormModal $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
+                    ->content(fn(?FormModal $record): ?string => $record?->updated_at->diffForHumans()),
             ])->columnSpan(1),
         ])->columns(4);
     }
@@ -209,7 +208,8 @@ class FormResource extends Resource
                 ->label('参与次数'),
             Tables\Columns\TextColumn::make('view_count')
                 ->label('浏览次数'),
-            Tables\Columns\BooleanColumn::make('active')
+            Tables\Columns\IconColumn::make('active')
+                ->boolean()
                 ->label('进行中'),
             Tables\Columns\TextColumn::make('runtime')
                 ->label('运行时间'),
