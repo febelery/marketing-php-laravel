@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\VoteResource\RelationManagers;
 
-use App\Forms\Components\QiniuFileUpload;
-use App\Forms\Components\WithQiniuUpload;
 use App\Models\Vote\Category;
 use App\Models\Vote\Item;
 use Filament\Forms;
@@ -14,8 +12,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 
 class ItemsRelationManager extends RelationManager
 {
-    use WithQiniuUpload;
-
     protected static string $relationship = 'items';
 
     protected static ?string $recordTitleAttribute = 'vote_id';

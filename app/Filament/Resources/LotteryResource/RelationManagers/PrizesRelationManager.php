@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\LotteryResource\RelationManagers;
 
-use App\Forms\Components\QiniuFileUpload;
-use App\Forms\Components\WithQiniuUpload;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Tables;
@@ -12,8 +10,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 
 class PrizesRelationManager extends RelationManager
 {
-    use WithQiniuUpload;
-
     protected static string $relationship = 'prizes';
 
     protected static ?string $recordTitleAttribute = 'lottery_id';
