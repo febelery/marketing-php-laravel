@@ -1,5 +1,6 @@
 @php
     use Filament\Support\Enums\Alignment;
+    use Qiniu\Auth;
 @endphp
 
 <x-dynamic-component
@@ -83,8 +84,8 @@
 
                             request.addEventListener('load', () => {
                                 console.log(JSON.parse(request.responseText))
-                                if(request.status < 300){
-                                    $wire.finishUploadByQiniu(`{{ $getStatePath() }}.${fileKey}`, JSON.parse(request.responseText).path)
+                                if ((request.status + '')[0] == 2) {
+                                    $wire.finishUpload(`{{ $getStatePath() }}.${fileKey}`, JSON.parse(request.responseText).path)
                                     success(fileKey)
                                 } else {
                                     error()
