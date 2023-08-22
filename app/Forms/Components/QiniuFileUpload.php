@@ -31,11 +31,15 @@ class QiniuFileUpload extends FileUpload
     public function getUploadedFiles(): ?array
     {
         $urls = [];
+        $state = $this->getState() ?? [];
+        if (!is_array($state)) {
+            $state = [$state];
+        }
 
-        foreach ($this->getState() ?? [] as $fileKey => $file) {
+        foreach ($state as $fileKey => $file) {
             $urls[$fileKey] = [
-                'name' => 'xxxx.png',
-                'size' => 12121012,
+                'name' => 'ross.png',
+                'size' => 1024,
                 'type' => 'image/png',
                 'url' => $file
             ];

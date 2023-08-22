@@ -14,8 +14,4 @@ class Setting extends Model
 
     public $timestamps = false;
 
-    public function settingable(): MorphTo
-    {
-        return $this->morphTo();
-    }
 }

@@ -19,6 +19,8 @@ class FormResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    protected static ?string $navigationGroup = '未完成';
+
     protected static ?string $label = '表单';
 
     protected static ?string $pluralLabel = '表单';

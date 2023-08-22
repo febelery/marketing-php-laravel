@@ -3,20 +3,21 @@
 namespace App\Models\Lottery;
 
 use App\Models\Setting;
+use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Lottery extends Model
 {
-    use HasFactory;
+    use HasFactory, Uuids;
 
     protected $guarded = [];
 
-    public function setting(): MorphOne
+    public function setting(): HasOne
     {
-        return $this->morphOne(Setting::class, 'settingable');
+        return $this->hasOne(Setting::class, 'uuid', 'uuid');
     }
 
     public function prizes(): HasMany
@@ -52,6 +53,6 @@ class Lottery extends Model
 
     public function getRemainPrizeAttribute(): int
     {
-        return (int)$this->prizes()->selectRaw('sum(total) - sum(lucky_count) as count')->first()?->count;
+        return (int)$this->prizes()->selectRaw('sum(total) - sum(lucky_total) as count')->first()?->count;
     }
 }

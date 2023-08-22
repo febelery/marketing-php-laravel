@@ -17,6 +17,8 @@ class VoteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?string $navigationGroup = '未完成';
+
     protected static ?string $label = '投票';
 
     protected static ?string $pluralLabel = '投票';

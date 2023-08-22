@@ -11,6 +11,7 @@ class Qa extends Page
 
     protected static string $view = 'filament.pages.qa';
 
+    protected static ?string $navigationGroup = '未完成';
     protected static ?int $navigationSort = 5;
 
     protected static ?string $navigationLabel = '答题';

@@ -28,6 +28,6 @@ class Prize extends Model
 
     public function getRemainAttribute()
     {
-        return $this->total - $this->lucky_count;
+        return $this->total - $this->lucky_total;
     }
 }

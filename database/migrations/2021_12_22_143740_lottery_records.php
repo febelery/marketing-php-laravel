@@ -11,7 +11,7 @@ class LotteryRecords extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('lottery_records', function (Blueprint $table) {
             $table->id();
@@ -41,7 +41,7 @@ class LotteryRecords extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('lottery_records');
     }

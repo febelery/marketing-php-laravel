@@ -17,32 +17,25 @@ class LotteryResource extends Resource
 {
     protected static ?string $model = Lottery::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-bookmark-square';
+    protected static ?string $navigationIcon = 'heroicon-o-gift';
+
+    protected static ?string $navigationGroup = '抽奖';
 
     protected static ?string $label = '抽奖';
 
-    protected static ?string $pluralLabel = '抽奖';
-
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Group::make()
-                    ->schema([
-                        //Forms\Components\Section::make()
-                        //    ->schema(static::getLotterySchema())
-                        //    ->columns(2),
-
-                        //Forms\Components\Section::make('奖项')
-                        //    ->schema(static::getPrizeSchema()),
-                    ])
+                    ->schema([])
                     ->columnSpan(['lg' => fn(?Lottery $record) => $record === null ? 3 : 2]),
 
                 Forms\Components\Section::make()
                     ->schema([
-                        Forms\Components\Toggle::make('is_public')
+                        Forms\Components\Toggle::make('status')
                             ->label('开启')
                             ->helperText('开启后，抽奖可以正常展示')
                             ->default(true),
@@ -107,7 +100,6 @@ class LotteryResource extends Resource
         return ['title'];
     }
 
-
     public static function getLotterySchema(): array
     {
         return [
@@ -150,7 +142,7 @@ class LotteryResource extends Resource
                         ->minValue(1)
                         ->required(),
                     Forms\Components\TextInput::make('lucky_limit')
-                        ->name('中奖次数')
+                        ->name('最大中奖次数')
                         ->numeric()
                         ->default(1)
                         ->minValue(1)
@@ -163,16 +155,11 @@ class LotteryResource extends Resource
                         ->minValue(1)
                         ->maxValue(100)
                         ->required(),
-                    Forms\Components\TextInput::make('daily_share_limit')
-                        ->name('每日分享增加次数')
-                        ->helperText('通过分享能增加的抽奖次数')
+                    Forms\Components\TextInput::make('cost_integral')
+                        ->name('积分抽奖')
+                        ->helperText('抽奖花费川观新闻积分(默认不填)')
+                        ->nullable()
                         ->numeric()
-                        ->default(0)
-                        ->minValue(0),
-                    Forms\Components\TextInput::make('total_share_limit')
-                        ->name('总共分享增加次数')
-                        ->numeric()
-                        ->default(0)
                         ->minValue(0),
                     Forms\Components\Select::make('template')
                         ->label('模板')
@@ -188,26 +175,14 @@ class LotteryResource extends Resource
                         ->reactive()
                         ->disableOptionWhen(fn($value): bool => $value > 5)
                         ->default(1),
-                    Forms\Components\Select::make('type')
-                        ->label('类型')
-                        ->options([
-                            1 => '默认',
-                            2 => '积分',
-                        ])
-                        ->required()
-                        ->disableOptionWhen(fn($value): bool => $value > 2)
-                        ->reactive()
-                        ->default(1),
-                    Forms\Components\TextInput::make('type_value')
-                        ->label('消耗积分')
-                        ->default(10)
-                        ->numeric()
-                        ->minValue(0)
-                        ->hidden(fn(callable $get) => $get('type') != 2)
-                        ->required(fn(callable $get) => $get('type') == 2),
+
                 ]),
-                //SettingForm::make('setting'),
+                Forms\Components\Toggle::make('more')
+                    ->label('更多')
+                    ->reactive()
+                    ->default(false),
             ])->columnSpan(2),
+            SettingForm::make('setting')->hidden(fn(callable $get) => $get('more') == false)->columnSpan('full'),
             Forms\Components\Section::make()
                 ->schema([
                     Forms\Components\Placeholder::make('created_at')
@@ -229,75 +204,84 @@ class LotteryResource extends Resource
                 ->label('奖项')
                 ->relationship()
                 ->schema([
+                    Forms\Components\Section::make()
+                        ->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->label('奖品')
+                                ->placeholder('奖品名称')
+                                ->columns(1)
+                                ->required(),
+                            Forms\Components\TextInput::make('total')
+                                ->label('奖品总数')
+                                ->numeric()
+                                ->minValue(0)
+                                ->default(1)
+                                ->columns(1)
+                                ->required(),
+                            Forms\Components\TextInput::make('remain')
+                                ->label('剩余奖品')
+                                ->disabled(),
+                            Forms\Components\TextInput::make('weight')
+                                ->label('权重')
+                                ->numeric()
+                                ->minValue(0)
+                                ->maxValue(100)
+                                ->default(100)
+                                ->columns(1)
+                                ->required(),
+                            Forms\Components\TextInput::make('lucky_limit')
+                                ->label('最大中奖次数')
+                                ->numeric()
+                                ->minValue(0)
+                                ->columns(1)
+                                ->default(1),
+                            Forms\Components\Select::make('type')
+                                ->label('类型')
+                                ->options([
+                                    1 => '实物',
+                                    2 => '积分',
+                                    3 => '红包',
+                                ])
+                                ->required()
+                                ->disableOptionWhen(fn($value): bool => $value > 1)
+                                ->reactive()
+                                ->columns(1)
+                                ->default(1),
+                            Forms\Components\TextInput::make('type_value')
+                                ->label('积分数量')
+                                ->default(10)
+                                ->numeric()
+                                ->minValue(0)
+                                ->columns(1)
+                                ->hidden(fn(callable $get) => $get('type') != 2)
+                                ->required(fn(callable $get) => $get('type') == 2),
+                            Forms\Components\TextInput::make('type_value')
+                                ->label('红包金额')
+                                ->default(10)
+                                ->numeric()
+                                ->minValue(0)
+                                ->hidden(fn(callable $get) => $get('type') != 3)
+                                ->required(fn(callable $get) => $get('type') == 3),
+                            Forms\Components\Textarea::make('desc')
+                                ->label('描述')
+                                ->columnSpan(3),
+                        ])->columnSpan(['lg' => 3])->columns(3),
                     Forms\Components\Section::make()->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->label('奖品')
-                            ->placeholder('奖品名称')
-                            ->columnSpan(5)
-                            ->required(),
-                        Forms\Components\TextInput::make('total')
-                            ->label('奖品总数')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(1)
-                            ->columnSpan(3)
-                            ->required(),
-                        Forms\Components\TextInput::make('weight')
-                            ->label('权重')
-                            ->numeric()
-                            ->minValue(0)
-                            ->maxValue(100)
-                            ->default(100)
-                            ->columnSpan(3)
-                            ->required(),
-                        Forms\Components\TextInput::make('limit_times')
-                            ->label('最大中奖次数')
-                            ->numeric()
-                            ->minValue(0)
-                            ->default(1)
-                            ->columnSpan(3)
-                            ->required(),
-                        Forms\Components\Select::make('type')
-                            ->label('类型')
-                            ->options([
-                                1 => '实物',
-                                2 => '虚拟',
-                                3 => '积分',
-                                4 => '红包',
-                            ])
-                            ->required()
-                            ->disableOptionWhen(fn($value): bool => $value > 3)
-                            ->reactive()
-                            ->columnSpan(3)
-                            ->default(1),
-                        Forms\Components\TextInput::make('type_value')
-                            ->label('积分数量')
-                            ->default(10)
-                            ->numeric()
-                            ->minValue(0)
-                            ->columnSpan(3)
-                            ->hidden(fn(callable $get) => $get('type') != 3)
-                            ->required(fn(callable $get) => $get('type') == 3),
-                        Forms\Components\TextInput::make('type_value')
-                            ->label('红包金额')
-                            ->default(10)
-                            ->numeric()
-                            ->minValue(0)
-                            ->hidden(fn(callable $get) => $get('type') != 4)
-                            ->required(fn(callable $get) => $get('type') == 4),
-                        Forms\Components\Textarea::make('desc')
-                            ->label('选项描述')
-                            ->columnSpan(8),
-                        QiniuFileUpload::make('icon')
+                        QiniuFileUpload::make('image')
                             ->label('图片')
-                            ->columnSpan(6)
+                            ->imageResizeMode('cover')
+                            ->helperText('图片为正方形效果最佳')
+                            //->imagePreviewHeight('100')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '4:3',
+                                '1:1',
+                            ])
                             ->openable()
                             ->image(),
-                        //Forms\Components\Toggle::make('is_public')
-                        //    ->label('开启')
-                        //    ->default(true),
-                    ])->columns(20),
-                ])
+
+                    ])->columnSpan(['lg' => 2]),
+                ])->columns(5)
         ];
     }
 
