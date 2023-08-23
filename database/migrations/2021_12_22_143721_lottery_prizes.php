@@ -16,7 +16,7 @@ class LotteryPrizes extends Migration
         Schema::create('lottery_prizes', function (Blueprint $table) {
             $table->id();
             $table->integer('lottery_id')->index();
-            $table->string('name');
+            $table->string('title');
             $table->string('image')->nullable();
             $table->text('desc')->nullable();
 

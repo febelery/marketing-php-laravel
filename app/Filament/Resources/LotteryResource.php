@@ -10,6 +10,8 @@ use App\Models\Lottery\Lottery;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -29,27 +31,11 @@ class LotteryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Group::make()
-                    ->schema([])
-                    ->columnSpan(['lg' => fn(?Lottery $record) => $record === null ? 3 : 2]),
-
+                //Forms\Components\Section::make()
+                //    ->schema(static::getLotterySchema()),
                 Forms\Components\Section::make()
-                    ->schema([
-                        Forms\Components\Toggle::make('status')
-                            ->label('开启')
-                            ->helperText('开启后，抽奖可以正常展示')
-                            ->default(true),
-                        Forms\Components\Placeholder::make('created_at')
-                            ->label('创建时间')
-                            ->content(fn(?Lottery $record): ?string => $record?->created_at->diffForHumans()),
-                        Forms\Components\Placeholder::make('updated_at')
-                            ->label('修改时间')
-                            ->content(fn(?Lottery $record): ?string => $record?->updated_at?->diffForHumans()),
-                    ])
-                    ->columnSpan(1)
-                    ->hidden(fn(?Lottery $record) => $record === null),
-            ])
-            ->columns(3);
+                    ->schema(static::getPrizeSchema()),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -74,9 +60,32 @@ class LotteryResource extends Resource
         ])->filters([
 
         ])->actions([
+            Tables\Actions\ViewAction::make(),
             Tables\Actions\EditAction::make(),
             Tables\Actions\DeleteAction::make(),
         ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Section::make('奖项')
+                    ->schema([
+
+                        Infolists\Components\RepeatableEntry::make('prizes')
+                            ->label('')
+                            ->schema([
+                                Infolists\Components\TextEntry::make('title')->label('奖品名称'),
+                                Infolists\Components\TextEntry::make('total')->label('奖品总数'),
+                                Infolists\Components\TextEntry::make('remain')->label('剩余奖品'),
+                                Infolists\Components\ImageEntry::make('image')->label('图片')->openUrlInNewTab(),
+                                Infolists\Components\TextEntry::make('created_at')->label('创建时间'),
+                            ])->columns(5),
+
+                    ])
+                    ->collapsible(),
+            ]);
     }
 
     public static function getRelations(): array
@@ -92,6 +101,7 @@ class LotteryResource extends Resource
             'index' => Pages\ListLotteries::route('/'),
             'create' => Pages\CreateLottery::route('/create'),
             'edit' => Pages\EditLottery::route('/{record}/edit'),
+            'view' => Pages\ViewLottery::route('/{record}'),
         ];
     }
 
@@ -177,12 +187,8 @@ class LotteryResource extends Resource
                         ->default(1),
 
                 ]),
-                Forms\Components\Toggle::make('more')
-                    ->label('更多')
-                    ->reactive()
-                    ->default(false),
             ])->columnSpan(2),
-            SettingForm::make('setting')->hidden(fn(callable $get) => $get('more') == false)->columnSpan('full'),
+            SettingForm::make('setting')->columnSpan('full'),
             Forms\Components\Section::make()
                 ->schema([
                     Forms\Components\Placeholder::make('created_at')
@@ -206,7 +212,7 @@ class LotteryResource extends Resource
                 ->schema([
                     Forms\Components\Section::make()
                         ->schema([
-                            Forms\Components\TextInput::make('name')
+                            Forms\Components\TextInput::make('title')
                                 ->label('奖品')
                                 ->placeholder('奖品名称')
                                 ->columns(1)

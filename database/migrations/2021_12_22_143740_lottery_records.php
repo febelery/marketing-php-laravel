@@ -20,10 +20,9 @@ class LotteryRecords extends Migration
             $table->integer('prize_id')->unsigned();
 
             $table->string('name')->nullable();
-            $table->string('username')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('mobile')->nullable();
             $table->string('address')->nullable();
-            $table->string('id_card')->nullable();
+            $table->string('idcard')->nullable();
             $table->string('remark')->nullable()->comment('备注');
             $table->string('code')->nullable();
             $table->string('express')->nullable()->comment('快递单号');

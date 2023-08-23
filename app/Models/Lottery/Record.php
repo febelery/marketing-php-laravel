@@ -34,8 +34,9 @@ class Record extends Model
     public function getDeliveryAttribute(): string
     {
         return match ($this->delivery_type) {
-            0 => '自体',
-            1 => '邮寄',
+            null => '无',
+            1 => '自提',
+            2 => '邮寄',
         };
     }
 

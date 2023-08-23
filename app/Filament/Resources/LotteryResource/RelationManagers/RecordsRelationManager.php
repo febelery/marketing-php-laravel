@@ -13,11 +13,7 @@ class RecordsRelationManager extends RelationManager
 {
     protected static string $relationship = 'records';
 
-    protected static ?string $recordTitleAttribute = 'lottery_id';
-
-    protected static ?string $label = '中奖记录';
-
-    protected static ?string $pluralLabel = '中奖记录';
+    protected static ?string $title = '中奖记录';
 
     public function getRelationship(): Relation
     {
@@ -34,7 +30,7 @@ class RecordsRelationManager extends RelationManager
         return [];
     }
 
-    public  function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form->schema([
             Forms\Components\Select::make('status')
@@ -46,11 +42,11 @@ class RecordsRelationManager extends RelationManager
         ]);
     }
 
-    public  function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('prize.name')
+                Tables\Columns\TextColumn::make('prize.title')
                     ->label('奖品')
                     ->searchable()
                     ->sortable(),
@@ -62,7 +58,7 @@ class RecordsRelationManager extends RelationManager
                     ->label('姓名')
                     ->default('-')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
+                Tables\Columns\TextColumn::make('mobile')
                     ->label('电话')
                     ->default('-')
                     ->searchable(),
