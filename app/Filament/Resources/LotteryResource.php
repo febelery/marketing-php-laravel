@@ -14,6 +14,7 @@ use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 
 class LotteryResource extends Resource
 {
@@ -48,10 +49,6 @@ class LotteryResource extends Resource
                 ->searchable(),
             Tables\Columns\TextColumn::make('remain_prize')
                 ->label('剩余奖品'),
-            Tables\Columns\TextColumn::make('record_user')
-                ->label('参与人数'),
-            Tables\Columns\TextColumn::make('view_count')
-                ->label('浏览次数'),
             Tables\Columns\IconColumn::make('active')
                 ->boolean()
                 ->label('进行中'),
@@ -61,6 +58,14 @@ class LotteryResource extends Resource
 
         ])->actions([
             Tables\Actions\ViewAction::make(),
+            Tables\Actions\Action::make('地址')
+                ->requiresConfirmation()
+                ->icon('heroicon-o-link')
+                ->modalHeading('前端页面地址')
+                ->color('success')
+                ->modalDescription('可复制链接在新窗口打开预览')
+                ->modalContent(fn($record) => new HtmlString(env('FRONT_URL') . '/#/lottery/' . $record->uuid))
+                ->modalSubmitActionLabel('看了'),
             Tables\Actions\EditAction::make(),
             Tables\Actions\DeleteAction::make(),
         ]);
@@ -72,7 +77,6 @@ class LotteryResource extends Resource
             ->schema([
                 Infolists\Components\Section::make('奖项')
                     ->schema([
-
                         Infolists\Components\RepeatableEntry::make('prizes')
                             ->label('')
                             ->schema([
@@ -161,7 +165,7 @@ class LotteryResource extends Resource
                         ->name('中奖概率')
                         ->helperText('0为必不中奖,100为必中奖')
                         ->numeric()
-                        ->default(10)
+                        ->default(20)
                         ->minValue(1)
                         ->maxValue(100)
                         ->required(),
@@ -188,7 +192,7 @@ class LotteryResource extends Resource
 
                 ]),
             ])->columnSpan(2),
-            SettingForm::make('setting')->columnSpan('full'),
+            //SettingForm::make('setting')->columnSpan('full'),
             Forms\Components\Section::make()
                 ->schema([
                     Forms\Components\Placeholder::make('created_at')
@@ -215,7 +219,7 @@ class LotteryResource extends Resource
                             Forms\Components\TextInput::make('title')
                                 ->label('奖品')
                                 ->placeholder('奖品名称')
-                                ->columns(1)
+                                ->columnSpan(['lg' => 2])
                                 ->required(),
                             Forms\Components\TextInput::make('total')
                                 ->label('奖品总数')
@@ -224,17 +228,13 @@ class LotteryResource extends Resource
                                 ->default(1)
                                 ->columns(1)
                                 ->required(),
-                            Forms\Components\TextInput::make('remain')
-                                ->label('剩余奖品')
-                                ->disabled(),
                             Forms\Components\TextInput::make('weight')
                                 ->label('权重')
                                 ->numeric()
                                 ->minValue(0)
                                 ->maxValue(100)
                                 ->default(100)
-                                ->columns(1)
-                                ->required(),
+                                ->columns(1),
                             Forms\Components\TextInput::make('lucky_limit')
                                 ->label('最大中奖次数')
                                 ->numeric()
@@ -277,7 +277,6 @@ class LotteryResource extends Resource
                             ->label('图片')
                             ->imageResizeMode('cover')
                             ->helperText('图片为正方形效果最佳')
-                            //->imagePreviewHeight('100')
                             ->imageEditor()
                             ->imageEditorAspectRatios([
                                 '4:3',

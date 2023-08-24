@@ -38,7 +38,7 @@ class Lottery extends Model
 
     public function getActiveAttribute(): bool
     {
-        return $this->start_at <= now() && $this->end_at >= now() && $this->is_public;
+        return $this->start_at <= now() && $this->end_at >= now() && $this->status;
     }
 
     public function getRecordUserAttribute(): int

@@ -1,6 +1,5 @@
 @php
     use Filament\Support\Enums\Alignment;
-    use Qiniu\Auth;
 @endphp
 
 <x-dynamic-component
